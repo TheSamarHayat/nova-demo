@@ -15,7 +15,15 @@ type ShowcaseModelProps = {
   visible?: boolean;
 };
 
-function ShowcaseModel({ url, position, scale, active, clip, kind, visible = true }: ShowcaseModelProps) {
+function ShowcaseModel({
+  url,
+  position,
+  scale,
+  active,
+  clip,
+  kind,
+  visible = true,
+}: ShowcaseModelProps) {
   const ref = useRef<THREE.Group>(null);
   const { scene, animations } = useGLTF(url);
   const { actions } = useAnimations(animations, ref);
@@ -31,9 +39,12 @@ function ShowcaseModel({ url, position, scale, active, clip, kind, visible = tru
 
   useFrame((state) => {
     if (!ref.current || !visible) return;
-    const rotationSpeed = kind === "helmet" ? (active ? 0.85 : 0.22) : kind === "astronaut" ? 0.16 : 0.06;
-    ref.current.rotation.y = (kind === "fox" ? Math.PI / 2 : 0) + state.clock.elapsedTime * rotationSpeed;
-    ref.current.position.y = position[1] + (kind === "astronaut" ? Math.sin(state.clock.elapsedTime * 1.5) * 0.12 : 0);
+    const rotationSpeed =
+      kind === "helmet" ? (active ? 0.85 : 0.22) : kind === "astronaut" ? 0.16 : 0.06;
+    ref.current.rotation.y =
+      (kind === "fox" ? Math.PI / 2 : 0) + state.clock.elapsedTime * rotationSpeed;
+    ref.current.position.y =
+      position[1] + (kind === "astronaut" ? Math.sin(state.clock.elapsedTime * 1.5) * 0.12 : 0);
   });
 
   return (
@@ -45,7 +56,13 @@ function ShowcaseModel({ url, position, scale, active, clip, kind, visible = tru
   );
 }
 
-export function ShowcaseScene({ activeModel, mobile = false }: { activeModel: number; mobile?: boolean }) {
+export function ShowcaseScene({
+  activeModel,
+  mobile = false,
+}: {
+  activeModel: number;
+  mobile?: boolean;
+}) {
   const host = useReactRef<HTMLDivElement>(null);
   const inView = useInView(host, { margin: "400px" });
 

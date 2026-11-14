@@ -10,6 +10,8 @@ export function RobotScene() {
   const root = useRef<THREE.Group>(null);
   const { scene, animations } = useGLTF(novaAssets.robot);
   const { actions } = useAnimations(animations, group);
+  const section = useNovaScroll((state) => state.section);
+  const sectionProgress = useNovaScroll((state) => state.sectionProgress);
   const playing = useRef<string | null>(null);
 
   useEffect(() => {
@@ -34,8 +36,6 @@ export function RobotScene() {
   }, [actions]);
 
   useEffect(() => {
-    const section = useNovaScroll.getState().section;
-    const sectionProgress = useNovaScroll.getState().sectionProgress;
     let target = "Idle";
     if (section === 2) target = sectionProgress > 0.58 ? "Running" : "Walking";
     if (section === 1 && sectionProgress > 0.78) target = "ThumbsUp";
@@ -52,7 +52,7 @@ export function RobotScene() {
     next.setLoop(oneShot ? THREE.LoopOnce : THREE.LoopRepeat, oneShot ? 1 : Infinity);
     next.clampWhenFinished = oneShot;
     playing.current = target;
-  }, [actions, useNovaScroll((state) => state.section), useNovaScroll((state) => state.sectionProgress)]);
+  }, [actions, section, sectionProgress]);
 
   useFrame((state, delta) => {
     if (!root.current) return;
@@ -61,17 +61,50 @@ export function RobotScene() {
     const features = section === 1;
     const how = section === 2;
     const contact = section === 4;
-    const targetX = hero ? (state.size.width < 768 ? 0.52 : 1.55) : features ? -1.15 : how ? Math.sin(sectionProgress * Math.PI * 2) * 1.2 : contact ? 1.45 : 0;
+    const targetX = hero
+      ? state.size.width < 768
+        ? 0.52
+        : 1.55
+      : features
+        ? -1.15
+        : how
+          ? Math.sin(sectionProgress * Math.PI * 2) * 1.2
+          : contact
+            ? 1.45
+            : 0;
     const targetY = hero ? -0.35 : features ? -0.45 : how ? -0.45 : contact ? -0.5 : -0.55;
-    const targetScale = state.size.width < 768 ? 0.43 : section === 1 ? 0.48 : section === 0 ? 0.48 : 0.46;
+    const targetScale =
+      state.size.width < 768 ? 0.43 : section === 1 ? 0.48 : section === 0 ? 0.48 : 0.46;
     root.current.position.x = THREE.MathUtils.damp(root.current.position.x, targetX, 2.4, delta);
-    root.current.position.y = THREE.MathUtils.damp(root.current.position.y, targetY + Math.sin(state.clock.elapsedTime * 1.4) * 0.035, 2.4, delta);
+    root.current.position.y = THREE.MathUtils.damp(
+      root.current.position.y,
+      targetY + Math.sin(state.clock.elapsedTime * 1.4) * 0.035,
+      2.4,
+      delta,
+    );
     const show = section === 3 ? 0 : 1;
     root.current.visible = show > 0;
-    root.current.scale.setScalar(THREE.MathUtils.damp(root.current.scale.x, targetScale * show, 2.8, delta));
-    const targetRotation = how ? Math.PI + sectionProgress * Math.PI * 2 : hero ? -0.35 : features ? Math.PI / 2 : -0.3;
-    root.current.rotation.y = THREE.MathUtils.damp(root.current.rotation.y, targetRotation, 2.4, delta);
-    const cameraTarget = new THREE.Vector3(features ? -0.5 : 0, 0.25, features ? 6.4 : how ? 7.4 : 7);
+    root.current.scale.setScalar(
+      THREE.MathUtils.damp(root.current.scale.x, targetScale * show, 2.8, delta),
+    );
+    const targetRotation = how
+      ? Math.PI + sectionProgress * Math.PI * 2
+      : hero
+        ? -0.35
+        : features
+          ? Math.PI / 2
+          : -0.3;
+    root.current.rotation.y = THREE.MathUtils.damp(
+      root.current.rotation.y,
+      targetRotation,
+      2.4,
+      delta,
+    );
+    const cameraTarget = new THREE.Vector3(
+      features ? -0.5 : 0,
+      0.25,
+      features ? 6.4 : how ? 7.4 : 7,
+    );
     state.camera.position.lerp(cameraTarget, 1 - Math.exp(-delta * 2.2));
     state.camera.lookAt(features ? -0.5 : 0, 0.45, 0);
   });

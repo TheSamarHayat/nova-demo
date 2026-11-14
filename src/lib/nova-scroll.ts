@@ -13,6 +13,5 @@ export const useNovaScroll = create<NovaScrollState>((set) => ({
   progress: 0,
   section: 0,
   sectionProgress: 0,
-  setScroll: (progress, section, sectionProgress) =>
-    set({ progress, section, sectionProgress }),
+  setScroll: (progress, section, sectionProgress) => set({ progress, section, sectionProgress }),
 }));

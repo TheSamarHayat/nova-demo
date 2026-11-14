@@ -71,15 +71,21 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   head: () => ({
-      // Each content route, including /, sets its own app-specific metadata.
+    // Each content route, including /, sets its own app-specific metadata.
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "NOVA — Your AI Companion, Built for Tomorrow" },
-      { name: "description", content: "NOVA is an AI companion that learns, adapts and works beside you." },
+      {
+        name: "description",
+        content: "NOVA is an AI companion that learns, adapts and works beside you.",
+      },
       { name: "author", content: "NOVA" },
       { property: "og:title", content: "NOVA — Your AI Companion" },
-      { property: "og:description", content: "Meet NOVA: an AI companion that learns, adapts and works beside you." },
+      {
+        property: "og:description",
+        content: "Meet NOVA: an AI companion that learns, adapts and works beside you.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -92,7 +98,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "alternate icon", href: "/favicon.ico", type: "image/x-icon" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap",
+      },
     ],
   }),
   shellComponent: RootShell,
