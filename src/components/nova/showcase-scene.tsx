@@ -1,4 +1,4 @@
-import { Suspense, useRef, useEffect, useRef as useReactRef } from "react";
+import { Suspense, useRef, useEffect } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Center, useAnimations, useGLTF } from "@react-three/drei";
 import * as THREE from "three";
@@ -63,7 +63,7 @@ export function ShowcaseScene({
   activeModel: number;
   mobile?: boolean;
 }) {
-  const host = useReactRef<HTMLDivElement>(null);
+  const host = useRef<HTMLDivElement>(null);
   const inView = useInView(host, { margin: "400px" });
 
   const models = [
